@@ -1,9 +1,10 @@
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useEffect, useMemo } from 'react';
 import { TextField, Button, Snackbar, Alert } from '@mui/material';
 import Header from '@blocklet/ui-react/lib/Header';
 import Footer from '@blocklet/ui-react/lib/Footer';
 import './profile.css';
 import { useLocaleContext } from '@arcblock/ux/lib/Locale/context';
+import { usePrevious } from 'react-use';
 import useProfileStorage from '../profile-storage';
 
 const PROFILE_PROP_INFO = {
@@ -24,14 +25,17 @@ const PROFILE_PROP_KEY = Object.keys(PROFILE_PROP_INFO);
 
 function Profile() {
   const { t, locale } = useLocaleContext();
+  const prevLocale = usePrevious(locale);
 
   const { profile, available, save: saveProfile, isNewProfile } = useProfileStorage();
 
   const [profileFormValues, setProfileFormValues] = useState(profile);
   const [showStorageError, setShowStorageError] = useState(!available);
-  const [errorMsg, setErrorMsg] = useState(PROFILE_PROP_KEY.map((key) => ({ [key]: '' })));
   const [isEditing, setIsEditing] = useState(isNewProfile);
   const [touched, setTouched] = useState(false);
+
+  const [errorMsg, setErrorMsg] = useState(PROFILE_PROP_KEY.map((key) => ({ [key]: '' })));
+  const hasError = useMemo(() => Object.keys(errorMsg).some((key) => !!errorMsg[key]), [errorMsg]);
 
   const handleCloseStorageError = useCallback(() => {
     setShowStorageError(false);
@@ -121,6 +125,13 @@ function Profile() {
       saveProfile(profileFormValues);
     }
   }, [saveProfile, handleValidateAll, profileFormValues]);
+
+  useEffect(() => {
+    // 切换语言时，如果当前处于错误状态，更新 error message
+    if (hasError && prevLocale !== locale) {
+      handleValidateAll();
+    }
+  }, [hasError, handleValidateAll, locale, prevLocale]);
 
   return (
     <div className="page-profile">
