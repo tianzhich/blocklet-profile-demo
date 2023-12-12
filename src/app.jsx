@@ -1,16 +1,14 @@
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
-
 import './app.css';
-import Home from './pages/home';
-import About from './pages/about';
+import { LocaleProvider } from '@arcblock/ux/lib/Locale/context';
+import Profile from './pages/profile';
+import translations from './locales';
 
 function App() {
   return (
     <div className="app">
       <Routes>
-        <Route exact path="/" element={<Home />} />
-        <Route path="/about" element={<About />} />
-        <Route path="/home" element={<Home />} />
+        <Route exact path="/" element={<Profile />} />
         <Route path="*" element={<Navigate to="/" />} />
       </Routes>
     </div>
@@ -22,8 +20,10 @@ export default function WrappedApp() {
   const basename = window?.blocklet?.prefix || '/';
 
   return (
-    <Router basename={basename}>
-      <App />
-    </Router>
+    <LocaleProvider translations={translations}>
+      <Router basename={basename}>
+        <App />
+      </Router>
+    </LocaleProvider>
   );
 }

@@ -1,0 +1,68 @@
+.page-profile {
+  height: 100vh;
+  overflow-y: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.page-profile-content {
+  flex: 1;
+  margin: 32px 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.page-profile-content-header {
+  margin: 20px 0;
+}
+
+.page-profile-content-form {
+  width: 600px;
+  padding: 20px 20px 32px 20px;
+  border: 1px solid #e1e3e1;
+  border-radius: 8px;
+  position: relative;
+}
+
+@media screen and (max-width: 750px) {
+  .page-profile-content-form {
+    width: 80%;
+  }
+}
+@media screen and (max-width: 480px) {
+  .page-profile-content-form {
+    width: 90%;
+    min-width: 280px;
+  }
+}
+@media screen and (max-width: 320px) {
+  .page-profile-content-form {
+    min-width: 150px;
+  }
+}
+
+.page-profile-content-submit {
+  margin-top: 20px;
+}
+
+.page-profile-content-form--editing > .page-profile-content-submit {
+  float: right;
+}
+
+.profile-save-button.MuiButton-root {
+  margin-left: 8px;
+}
+
+.page-profile-content-submit > .MuiButton-root {
+  border-radius: 9999px;
+}
+
+.profile-field:not(:last-child) {
+  margin-bottom: 10px;
+}
+
+/* Override */
+.profile-field .Mui-readOnly:hover:not(.Mui-disabled, .Mui-error)::before {
+  border-bottom: 1px solid rgba(0, 0, 0, 0.42);
+}
