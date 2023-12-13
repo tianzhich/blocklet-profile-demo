@@ -9,10 +9,12 @@ import useProfileStorage from '../profile-storage';
 
 const PROFILE_PROP_INFO = {
   userName: {
+    /** The username should start with a letter, be 5 to 15 characters long, and only contain letters, numbers, and underscores. */
     rule: /^[a-zA-Z]\w{4,14}$/,
     required: true,
   },
   phone: {
+    /** The international phone numbers starts with a optional plus sign, followed by a non-zero digit, and then 1 to 14 additional digits */
     rule: /^\+?[1-9]\d{1,14}$/,
     required: false,
   },
@@ -30,7 +32,7 @@ function Profile() {
   const { profile, available, save: saveProfile, isNewProfile } = useProfileStorage();
 
   const [profileFormValues, setProfileFormValues] = useState(profile);
-  const [showStorageError, setShowStorageError] = useState(!available);
+  const [showStorageError, setShowStorageError] = useState(available !== 0);
   const [isEditing, setIsEditing] = useState(isNewProfile);
   const [touched, setTouched] = useState(false);
 
@@ -41,7 +43,7 @@ function Profile() {
     setShowStorageError(false);
   }, []);
 
-  const handleChange = useCallback(
+  const handleFormValueChange = useCallback(
     (e) => {
       setProfileFormValues((prev) => ({ ...prev, [e.target.name]: e.target.value }));
       setTouched(true);
@@ -65,6 +67,7 @@ function Profile() {
       if (PROFILE_PROP_KEY.indexOf(name) > -1) {
         const { rule, required } = PROFILE_PROP_INFO[name];
 
+        // check if it's required first
         if (!value || value.trim() === '') {
           if (required) {
             return t('requiredHelpText');
@@ -72,6 +75,7 @@ function Profile() {
           return '';
         }
 
+        // check with its validation rule
         if (rule && !rule.test(value)) {
           return getValidateHelpText(name);
         }
@@ -127,7 +131,7 @@ function Profile() {
   }, [saveProfile, handleValidateAll, profileFormValues]);
 
   useEffect(() => {
-    // 切换语言时，如果当前处于错误状态，更新 error message
+    // update the language of the error messages after changing the locale
     if (hasError && prevLocale !== locale) {
       handleValidateAll();
     }
@@ -148,10 +152,11 @@ function Profile() {
                 variant="standard"
                 name={key}
                 value={profileFormValues?.[key] ? profileFormValues[key] : ''}
-                onChange={handleChange}
+                onChange={handleFormValueChange}
                 InputProps={{
                   readOnly: !isEditing,
                 }}
+                /** disable focus on readonly mode */
                 focused={!isEditing ? false : undefined}
                 className="profile-field"
                 error={!!errorMsg[key]}
@@ -186,12 +191,13 @@ function Profile() {
         </div>
       </div>
       <Footer />
+      {/* show alert messages when the localStorage is unavailable or its quota is exceeded */}
       <Snackbar
         open={showStorageError}
         onClose={handleCloseStorageError}
         anchorOrigin={{ vertical: 'top', horizontal: 'right' }}>
         <Alert onClose={handleCloseStorageError} severity="warning" sx={{ width: '80%' }}>
-          {t('storageUnavailable')}
+          {available === 1 ? t('storageUnavailable') : t('storageQuotaExceeded')}
         </Alert>
       </Snackbar>
     </div>

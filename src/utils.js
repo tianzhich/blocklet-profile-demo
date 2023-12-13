@@ -1,4 +1,10 @@
-// eslint-disable-next-line import/prefer-default-export
+/* eslint-disable import/prefer-default-export */
+
+/**
+ * Check if storage is available by its type
+ * @param {*} type localStoarge | sessionStorage
+ * @returns 0: available, 1: not available, 2: not available because quota is exceeded.
+ */
 export function storageAvailable(type) {
   let storage;
   try {
@@ -6,9 +12,9 @@ export function storageAvailable(type) {
     const x = '__storage_test__';
     storage.setItem(x, x);
     storage.removeItem(x);
-    return true;
+    return 0;
   } catch (e) {
-    return (
+    const isQuotaExceeded =
       e instanceof DOMException &&
       // everything except Firefox
       (e.code === 22 ||
@@ -21,7 +27,7 @@ export function storageAvailable(type) {
         e.name === 'NS_ERROR_DOM_QUOTA_REACHED') &&
       // acknowledge QuotaExceededError only if there's something already stored
       storage &&
-      storage.length !== 0
-    );
+      storage.length !== 0;
+    return isQuotaExceeded ? 2 : 1;
   }
 }

@@ -9,7 +9,8 @@ export default flatten({
   save: 'Save',
   cancel: 'Cancel',
   storageUnavailable:
-    "You current browser doesn't support localStorage or it succeed the quota. Your profile info will not be stored. Please try to use a modern browser with latest version, like Chrome, Firefox, Safari, etc...",
+    "You current browser doesn't support localStorage. Your profile info will not be stored. Please try to use a modern browser with latest version, like Chrome, Firefox, Safari, etc...",
+  storageQuotaExceeded: 'Your current browser localStorage is full. Your profile info will not be stored',
   profile: 'Personal Information',
   userNameHelpText:
     'The username should start with a letter, be 5 to 15 characters long, and only contain letters, numbers, and underscores.',
