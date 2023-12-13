@@ -1,145 +1,55 @@
-# Getting Started with Create Blocklet
+# Blocklet Profile Demo
 
-This project was bootstrapped with [Create Blocklet](https://github.com/blocklet/create-blocklet).
+This project was bootstrapped with [Create Blocklet](https://github.com/blocklet/create-blocklet). It shows the demo profile of a local user.
 
-This blocklet is a static project, which means this is a frontend application. It's contained `client` code.
+## How to Use
 
-## File Structure
+### Create or edit your profile
 
-- public/ - static files
-  - favicon.ico - favicon
-  - favicon.svg - favicon
-  - index.html - main html file, template for react
-- screenshots/ - Screenshots
-- src/ - Client side code (A standard react app structure)
-- .env - Environment variables
-- .env.local - Local environment variables
-- .eslintrc.js - ESLint configuration
-- .gitignore - Git ignore file
-- .prettierrc - Prettier configuration
-- blocklet.md - Blocklet README
-- blocklet.yml - Blocklet configuration
-- LICENSE - License file
-- logo.png - Blocklet logo file
-- Makefile - Makefile
-- package.json - Npm package file
-- README.md - A guide for this blocklet
-- version - Version file
+You can create your own profile. Input your username, phone and email. The username and email is required. Here are the rules of each field:
 
-## Development
+- UserName: It starts with a letter, be 5 to 15 characters long, and only contain letters, numbers, and underscores.
+- Phone: It starts with a optional plus sign, followed by a non-zero digit, and then 1 to 14 additional digits, commonly used for international phone numbers.
+- Email: It takes the commonly used email address.
 
-1. Make sure you have [@blocklet/cli](https://www.npmjs.com/package/@blocklet/cli) installed
+![Create profile](./screenshots/create.jpg)
 
-   Blocklet needs blocklet server as a dependency. So you need to install it first.
-   `npm install -g @blocklet/cli`
-   See details in [https://developer.blocklet.io/docs/en/quick-start/blocklet-server#use-the-binary-distribution](https://developer.blocklet.io/docs/en/quick-start/blocklet-server#use-the-binary-distribution)
+If you are in editing mode, you can cancel your editing whenever you want.
 
-2. Init blocklet server & start blocklet server
+![Edit profile](./screenshots/edit.jpg)
 
-   Before starting an blocklet server, you need to init blocklet server.
-   `blocklet server init --mode=debug`
-   `blocklet server start`
-   See details in [https://developer.blocklet.io/docs/en/quick-start/blocklet-server](https://developer.blocklet.io/docs/en/quick-start/blocklet-server)
+### View your profile
 
-3. Go to the project directory `cd [name]`
-4. Install dependencies: `npm install` or `yarn`
-5. Start development server: `blocklet dev`
+After you create or edit your profile. You can view the information. All of your informations are stored securely in your own browser. No one can get it without your permission.
 
-## Bundle
+![View profile](./screenshots/view.jpg)
 
-After developing a blocklet, you may need to bundle it. Use `npm run bundle` command.
+### Change your prefered language
 
-## Deploy
+You can use your prefered language by clicking the globe icon button on the top-right of the page. Now you can use:
 
-- If you want to deploy this blocklet to local blocklet server, you can use `blocklet deploy .blocklet/bundle` command(Make sure the blocklet is bundled before deployment.)
-  > Or you can simply use `npm run deploy` command.
-- If you want to deploy this blocklet to remote blocklet server, you can use the command below.
+- 简体中文
+- English
 
-  ```shell
-  blocklet deploy .blocklet/bundle --endpoint {your blocklet server url} --access-key {blocklet server access key} --access-secret {blocklet server access secret}
-  ```
+![Change the prefered language](./screenshots/change_language.jpg)
 
-  > Make sure the blocklet is bundled before deployment.
+We are working on ways support more languages as soon as possible. Stay tuned!
 
-## Upload to blocklet store
+### What if the local storage of your browser is unavailable?
 
-- If you want to upload the blocklet to any store for other users to download and use, you can following the following instructions.
+Please make sure to use the modern browsers like Chrome, FireFox, Safari or Microsoft Edge to access this demo. If your browser don't support the [localStorage API](https://developer.mozilla.org/en-US/docs/Web/API/Window/localStorage#browser_compatibility), your profile will not be stored. But you can still use it as you'd like.
 
-  Bump version at first.
+![Storage unavailable](./screenshots/storage_unavailable.jpg)
 
-  ```shell
-  make bump-version
-  ```
+There is one rare scenario that your localStorage quota is exceeded. If this happens, your profile will also not be stored.
 
-  Then config blocklet store url.
-  You can use those store url in below.
+![Storage quota exceeded](./screenshots/storage_quota_exceeded.jpg)
 
-  1. [https://store.blocklet.dev/](https://store.blocklet.dev/)
-  2. [https://dev.store.blocklet.dev/](https://dev.store.blocklet.dev/)
-  3. A blocklet store started by yourself.
-     > Make sure you have installed a `blocklet store` on your own blocklet server. Check it on here: [https://store.blocklet.dev/blocklet/z8ia29UsENBg6tLZUKi2HABj38Cw1LmHZocbQ](https://store.blocklet.dev/blocklet/z8ia29UsENBg6tLZUKi2HABj38Cw1LmHZocbQ)
+Feel free to contact me if you have any other questions.
 
-  ```shell
-  blocklet config set store {store url}
-  ```
+## More about blocklet
 
-  Get a `accessToken` from blocklet store.
-
-  > Why we need a `accessToken`?
-  > A `accessToken` is genrate by blocklet store, which help us upload our blocklet to any store.
-
-  Set `accessToken` to blocklet config
-
-  ```shell
-  blocklet config set accessToken {accessToken}
-  ```
-
-  Upload a new version to a store.
-
-  > Make sure the blocklet is bundled before upload.
-
-  ```shell
-  blocklet upload
-  ```
-
-  Or you can simply use `npm run upload` command.
-
-- You also can upload a new version to blocklet store by Github CI.
-  Bump version at first.
-
-  ```shell
-  make bump-version
-  ```
-
-  Push your code to Github main/master branch, or make a pull request to the main/master branch.
-  The CI workflow will automatically upload a new version to a store.
-
-## Q & A
-
-1. Q: How to change a blocklet's name?
-
-   A: Change the `name` field in the `package.json` file, change the `name` field in the `blocklet.yml` file.
-
-   You can also change the `title` field and `description` field in the `blocklet.yml` file.
-
-   Run `blocklet meta` command, you will get a `did` config, copy the `did` value.
-
-   Replace this command `"bundle": "PUBLIC_URL='/.blocklet/proxy/{did}' npm run build",` in `package.json`
-
-   Replace `did` field in the `blocklet.yml`
-
-2. Q: How to change a blocklet's logo?
-
-   Change the `logo.png` file root folder.
-
-   Or you can change the `logo` field in the `blocklet.yml` file.
-
-   > Make sure you have added the logo path to the `blocklet.yml` file `files` field.
-
-## Learn More
-
-- Full specification of `blocklet.yml`: [https://github.com/blocklet/blocklet-specification/blob/main/docs/meta.md](https://github.com/blocklet/blocklet-specification/blob/main/docs/meta.md)
-- Full document of Blocklet Server & blocklet development: [https://developer.blocklet.io/docs/en](https://developer.blocklet.io/docs/en)
+If you want to know more about blocklet, like its file structures, ci process, etc..., feel free to check this [document](./blocklet.md).
 
 ## License
 
