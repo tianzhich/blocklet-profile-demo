@@ -36,7 +36,12 @@ function Profile() {
   const [isEditing, setIsEditing] = useState(isNewProfile);
   const [touched, setTouched] = useState(false);
 
-  const [errorMsg, setErrorMsg] = useState(PROFILE_PROP_KEY.map((key) => ({ [key]: '' })));
+  const [errorMsg, setErrorMsg] = useState(
+    PROFILE_PROP_KEY.reduce((prev, curr) => {
+      prev[curr] = '';
+      return prev;
+    }, {})
+  );
   const hasError = useMemo(() => Object.keys(errorMsg).some((key) => !!errorMsg[key]), [errorMsg]);
 
   const handleCloseStorageError = useCallback(() => {
@@ -90,9 +95,9 @@ function Profile() {
     (e) => {
       const { name, value } = e.target;
       const msg = validate(name, value);
-      setErrorMsg({ ...errorMsg, [name]: msg });
+      setErrorMsg((prev) => ({ ...prev, [name]: msg }));
     },
-    [errorMsg, validate]
+    [validate]
   );
 
   const handleValidateAll = useCallback(() => {
@@ -169,9 +174,12 @@ function Profile() {
           <div className="page-profile-content-submit">
             {isEditing ? (
               [
-                <Button variant="text" color="primary" onClick={handleCancel} key="cancel">
-                  {t('cancel')}
-                </Button>,
+                /** hide the cancel button for the new user */
+                isNewProfile ? null : (
+                  <Button variant="text" color="primary" onClick={handleCancel} key="cancel">
+                    {t('cancel')}
+                  </Button>
+                ),
                 <Button
                   variant="contained"
                   color="primary"
